@@ -1,6 +1,9 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+import { extractCurrency, extractPrice } from "../util";
+import { json } from "stream/consumers";
 export async function scrapeAmazonProduct(url: string) {
+  const BulletPoints: string[] = [];
   const apiKey = process.env.SCRAPER_API_KEY;
   const apiurl = `http://api.scraperapi.com?api_key=${apiKey}&url=${encodeURIComponent(
     url
@@ -11,7 +14,44 @@ export async function scrapeAmazonProduct(url: string) {
     console.log(response.data);
     const $ = cheerio.load(response.data);
     const title = $("#productTitle").text().trim();
-    const currentPrice = $(".a-price-whole").first().text().trim();
-    console.log(title, currentPrice);
+    const currentPrice = extractPrice(
+      $(".priceToPay span.a-price-whole"),
+      $(".a.size.base.a-color-price"),
+      $(".a-button-selected .a-color-base")
+    );
+    const outOfStock =
+      $("#availability span").text().trim().toLowerCase() ===
+      "currently unavailable";
+    const originalPrice = $(".a-price.a-text-price span.a-offscreen")
+      .first()
+      .text()
+      .trim()
+      .replace(/[^\d.]/g, "");
+
+    // this return us url of the image
+    const images =
+      $("#imgBlkFront").attr("data-a-dynamic-image") ||
+      $("#landingImage").attr("data-a-dynamic-image") ||
+      "{}";
+    // here changing the string url to the object keys
+    const imageurls = Object.keys(JSON.parse(images));
+    const currency = extractCurrency($(".a-price-symbol"));
+    const discountRate = $(".savingsPercentage").text().replace(/[-%]/g, "");
+    const paraElements = $(
+      ".a-unordered-list.a-vertical.a-spacing-mini li span.a-list-item"
+    ).each((_, ele) => {
+      const text = $(ele).text().trim();
+      if (text) BulletPoints.push(text);
+    });
+    console.log({
+      title,
+      currentPrice,
+      originalPrice,
+      outOfStock,
+      imageurls,
+      currency,
+      discountRate,
+      BulletPoints,
+    });
   } catch (error) {}
 }
