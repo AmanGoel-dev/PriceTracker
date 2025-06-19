@@ -37,6 +37,7 @@ export async function scrapeAmazonProduct(url: string) {
     const imageurls = Object.keys(JSON.parse(images));
     const currency = extractCurrency($(".a-price-symbol"));
     const discountRate = $(".savingsPercentage").text().replace(/[-%]/g, "");
+    // getting all the elements and then extracting each elemenet data and put it in array
     const paraElements = $(
       ".a-unordered-list.a-vertical.a-spacing-mini li span.a-list-item"
     ).each((_, ele) => {
