@@ -2,6 +2,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import { extractCurrency, extractPrice } from "../util";
 import { json } from "stream/consumers";
+import { Erica_One } from "next/font/google";
 export async function scrapeAmazonProduct(url: string) {
   const BulletPoints: string[] = [];
   const apiKey = process.env.SCRAPER_API_KEY;
@@ -44,15 +45,27 @@ export async function scrapeAmazonProduct(url: string) {
       const text = $(ele).text().trim();
       if (text) BulletPoints.push(text);
     });
-    console.log({
+
+    const data = {
       title,
-      currentPrice,
-      originalPrice,
-      outOfStock,
-      imageurls,
-      currency,
-      discountRate,
-      BulletPoints,
-    });
-  } catch (error) {}
+      image: imageurls[0],
+      currency: currency || "₹",
+      url,
+      currentPrice: Number(currentPrice) || Number(originalPrice),
+      originalPrice: Number(originalPrice) || Number(currentPrice),
+      priceHistory: [],
+      discountRate: Number(discountRate),
+      productInfo: BulletPoints,
+      category: "category",
+      isOutOFStock: outOfStock,
+      reviewsCount: 100,
+      stars: 4.5,
+      lowestPrice: Number(currentPrice) || Number(originalPrice),
+      highestPrice: Number(originalPrice) || Number(currentPrice),
+      averagePrice: Number(currentPrice) || Number(originalPrice),
+    };
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
 }
