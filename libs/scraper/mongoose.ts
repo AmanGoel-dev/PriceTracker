@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 let isConnected = false;
 export const connectToDB = async () => {
   if (!process.env.MONGODB_URI) console.log("The MONGODB_URI is missing ");
@@ -7,8 +8,12 @@ export const connectToDB = async () => {
     return;
   }
   try {
-    await mongoose.connect(process.env.MONGODB_URI || "");
+    await mongoose.connect(process.env.MONGODB_URI || "", {
+      dbName: "PriceTracker",
+    });
     isConnected = true;
     console.log("connected to db");
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
