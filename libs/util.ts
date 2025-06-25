@@ -54,6 +54,7 @@ export function getAveragePrice(priceList: PriceHistoryItem[]) {
 
   return averagePrice;
 }
+//removes decimal and roundof the number and changeit to string
 export const formatNumber = (num: number = 0) => {
   return num.toLocaleString(undefined, {
     minimumFractionDigits: 0,
