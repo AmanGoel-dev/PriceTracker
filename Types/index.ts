@@ -42,3 +42,9 @@ export type EmailProductInfo = {
   title: string;
   url: string;
 };
+export const enum Notification {
+  WELCOME = "WELCOME",
+  CHANGE_OF_STOCK = "CHANGE_OF_STOCK",
+  LOWEST_PRICE = "LOWEST_PRICE",
+  THRESHOLD_MET = "THRESHOLD_MET",
+}

@@ -6,6 +6,9 @@ import { scrapeAmazonProduct } from "../scraper";
 import { connectToDB } from "../scraper/mongoose";
 import { getAveragePrice, getHighestPrice, getLowestPrice } from "../util";
 import toast from "react-hot-toast";
+import { Notification, User } from "@/Types";
+import { generateEmailBody } from "../nodemailer";
+import { send } from "process";
 
 export async function ScrapeAndStoreProduct(productUrl: string) {
   if (!productUrl) return;
@@ -78,4 +81,22 @@ export async function getSimilarProducts(productId: string) {
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function addUserEmailToProduct(productId: string, email: string) {
+  try {
+    const product = await Product.findById(productId);
+    if (!product) return;
+    // checking if user exist not geting it form array
+    const userExist = product.users.some((user: User) => user.email === email);
+    if (!userExist) {
+      product.users.push({ email: email });
+      await product.save();
+      const emailcontent = generateEmailBody(
+        { title: product.title, url: product.url },
+        Notification.WELCOME
+      );
+      await sendEmail(emailcontent, [email]);
+    }
+  } catch (error) {}
 }
