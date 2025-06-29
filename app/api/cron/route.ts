@@ -23,6 +23,7 @@ export async function GET() {
       products.map(async (currentProduct) => {
         const scrapedProduct = await scrapeAmazonProduct(currentProduct.url);
         if (!scrapedProduct) throw new Error("failed to scrape product");
+        console.log(scrapedProduct);
         const updatedPriceHistory = [
           ...currentProduct.priceHistory,
           { price: scrapedProduct.currentPrice },
