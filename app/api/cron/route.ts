@@ -36,13 +36,13 @@ export async function GET() {
         };
         const updatedProduct = await Product.findOneAndUpdate(
           { url: currentProduct.url },
-          { $set: product }
+          product
         );
 
         // getting the email notification type to send in email
         const emailNotificationType = getEmailNotificationType(
           scrapedProduct,
-          product
+          currentProduct
         );
         if (emailNotificationType !== "Nothing") {
           const productInfo = {
