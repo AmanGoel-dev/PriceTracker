@@ -7,7 +7,7 @@ import { connectToDB } from "../scraper/mongoose";
 import { getAveragePrice, getHighestPrice, getLowestPrice } from "../util";
 import toast from "react-hot-toast";
 import { Notification, User } from "@/Types";
-import { generateEmailBody } from "../nodemailer";
+import { generateEmailBody, sendEmail } from "../nodemailer";
 import { send } from "process";
 
 export async function ScrapeAndStoreProduct(productUrl: string) {

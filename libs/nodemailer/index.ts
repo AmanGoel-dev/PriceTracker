@@ -1,6 +1,11 @@
-import { EmailProductInfo, Notification, NotificationType } from "@/Types";
+import {
+  EmailContent,
+  EmailProductInfo,
+  Notification,
+  NotificationType,
+} from "@/Types";
 import nodemailer from "nodemailer";
-export const THRESHOLD_PERCENTAGE = 40; // Example threshold percentage for discount notifications
+export const THRESHOLD_PERCENTAGE = 4; // Example threshold percentage for discount notifications
 export const generateEmailBody = (
   product: EmailProductInfo,
   type: NotificationType
@@ -66,4 +71,30 @@ export const generateEmailBody = (
       throw new Error("Invalid notification type.");
   }
   return { subject, body };
+};
+const transporter = nodemailer.createTransport({
+  pool: true,
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+export const sendEmail = async (
+  emailcontent: EmailContent,
+  sendto: string[]
+) => {
+  const mailOptions = {
+    from: "",
+    to: sendto,
+    html: emailcontent.body,
+    subject: emailcontent.subject,
+  };
+  transporter.sendMail(mailOptions, (error: any, info: any) => {
+    if (error) {
+      return console.log("error happend while sending email", error);
+    }
+    console.log("Email sent: " + info.response);
+  });
 };

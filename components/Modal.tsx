@@ -8,8 +8,13 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
+
 import Image from "next/image";
-const Modal = () => {
+interface props {
+  productId: string;
+}
+import { addUserEmailToProduct } from "@/libs/actions";
+const Modal = ({ productId }: props) => {
   let [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState("");
@@ -18,7 +23,7 @@ const Modal = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // await addUserEmailToProduct(productId, email);
+    await addUserEmailToProduct(productId, email);
 
     setIsSubmitting(false);
     setEmail("");
