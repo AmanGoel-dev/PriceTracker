@@ -3,6 +3,8 @@ import Searchbar from "@/components/Searchbar";
 import Image from "next/image";
 import { getAllProducts } from "@/libs/actions";
 import ProductCard from "@/components/ProductCard";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 export default async function Home() {
   // defualt export for the page.tsx is must
   const allProducts = await getAllProducts();

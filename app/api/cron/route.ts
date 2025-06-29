@@ -34,7 +34,7 @@ export async function GET() {
           averagePrice: getAveragePrice(updatedPriceHistory),
         };
         const updatedProduct = await Product.findOneAndUpdate(
-          { url: scrapedProduct.url },
+          { url: product.url },
           { $set: product }
         );
 
