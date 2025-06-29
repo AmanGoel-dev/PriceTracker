@@ -31,7 +31,8 @@ export type NotificationType =
   | "WELCOME"
   | "CHANGE_OF_STOCK"
   | "LOWEST_PRICE"
-  | "THRESHOLD_MET";
+  | "THRESHOLD_MET"
+  | "Nothing";
 
 export type EmailContent = {
   subject: string;
@@ -41,6 +42,7 @@ export type EmailContent = {
 export type EmailProductInfo = {
   title: string;
   url: string;
+  image: string;
 };
 export const enum Notification {
   WELCOME = "WELCOME",

@@ -5,7 +5,7 @@ import {
   NotificationType,
 } from "@/Types";
 import nodemailer from "nodemailer";
-export const THRESHOLD_PERCENTAGE = 4; // Example threshold percentage for discount notifications
+export const THRESHOLD_PERCENTAGE = 40; // Example threshold percentage for discount notifications
 export const generateEmailBody = (
   product: EmailProductInfo,
   type: NotificationType
@@ -29,7 +29,7 @@ export const generateEmailBody = (
             <h3>${product.title} is back in stock!</h3>
             <p>Good news! ${product.title} is now back in stock.</p>
             <p>Don’t miss your chance - <a href="${product.url}" target="_blank" rel="noopener noreferrer">buy it now</a>!</p>
-            <img src="https://i.ibb.co/pwFBRMC/Screenshot-2023-09-26-at-1-47-50-AM.png" alt="Product Image" style="max-width: 100%;" />
+            <img src="${product.image}" alt="Product Image" style="max-width: 100%;" />
           </div>
           <p>Stay tuned for more updates on ${product.title} and other items you’re tracking with us.</p>
         </div>

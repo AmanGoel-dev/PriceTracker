@@ -5,10 +5,9 @@ import Product from "../models/product.model";
 import { scrapeAmazonProduct } from "../scraper";
 import { connectToDB } from "../scraper/mongoose";
 import { getAveragePrice, getHighestPrice, getLowestPrice } from "../util";
-import toast from "react-hot-toast";
+
 import { Notification, User } from "@/Types";
 import { generateEmailBody, sendEmail } from "../nodemailer";
-import { send } from "process";
 
 export async function ScrapeAndStoreProduct(productUrl: string) {
   if (!productUrl) return;
@@ -55,7 +54,6 @@ export async function getProductById(productId: string) {
     if (!product) return null;
     return product;
   } catch (error) {
-    toast.error("Error occured while fetching the item");
     console.log(error);
   }
 }
@@ -93,7 +91,11 @@ export async function addUserEmailToProduct(productId: string, email: string) {
       product.users.push({ email: email });
       await product.save();
       const emailcontent = generateEmailBody(
-        { title: product.title, url: product.url },
+        {
+          title: product.title,
+          url: product.url,
+          image: product.image,
+        },
         Notification.WELCOME
       );
       await sendEmail(emailcontent, [email]);

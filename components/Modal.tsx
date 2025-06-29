@@ -14,6 +14,7 @@ interface props {
   productId: string;
 }
 import { addUserEmailToProduct } from "@/libs/actions";
+import toast from "react-hot-toast";
 const Modal = ({ productId }: props) => {
   let [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,6 +27,7 @@ const Modal = ({ productId }: props) => {
     await addUserEmailToProduct(productId, email);
 
     setIsSubmitting(false);
+    toast.success("You will be notified when the price drops");
     setEmail("");
     closeModal();
   };
