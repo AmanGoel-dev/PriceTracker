@@ -10,12 +10,12 @@ import {
 } from "@/libs/util";
 
 import { NextResponse } from "next/server";
-export const maxDuration = 360; // 6 minutes
+export const maxDuration = 300; // 5 minutes
 export const dynamic = "force-dynamic"; // to make sure the route is dynamic and not static
 export const revalidate = 0; // to make sure the route is not cached
 export async function GET() {
   try {
-    connectToDB();
+    await connectToDB();
     const products = await Product.find();
     if (!products) throw new Error("No products found");
     // scraping the products and updating the database
@@ -35,7 +35,7 @@ export async function GET() {
           averagePrice: getAveragePrice(updatedPriceHistory),
         };
         const updatedProduct = await Product.findOneAndUpdate(
-          { url: product.url },
+          { url: currentProduct.url },
           { $set: product }
         );
 
@@ -69,5 +69,9 @@ export async function GET() {
     });
   } catch (error) {
     console.error("Error updating products:", error);
+    return NextResponse.json(
+      { message: "Error updating products", error: (error as Error).message },
+      { status: 500 }
+    );
   }
 }
