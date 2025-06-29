@@ -9,9 +9,10 @@ import {
   getLowestPrice,
 } from "@/libs/util";
 
-import { url } from "inspector";
 import { NextResponse } from "next/server";
-
+export const maxDuration = 360; // 6 minutes
+export const dynamic = "force-dynamic"; // to make sure the route is dynamic and not static
+export const revalidate = 0; // to make sure the route is not cached
 export async function GET() {
   try {
     connectToDB();
